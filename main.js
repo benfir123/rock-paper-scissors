@@ -33,7 +33,7 @@ function playRound(playerSelection, computerSelection) {
     else if (playerSelection.toLowerCase() === 'paper') {
         if (computerSelection === 'Rock') {
             playerScore++;
-            return `You Win! ${computerSelection} beats paper.`;
+            return `You Win! paper beats ${computerSelection}.`;
         }
         if (computerSelection === 'Paper') {
             playerScore++;
@@ -64,29 +64,34 @@ function playRound(playerSelection, computerSelection) {
 
 }
 
-function game() {
-    while (Math.max(computerScore, playerScore) < 5) {
-        
-        let playerSelection = prompt("Choose rock, paper, or scissors");
-
-        if (!playerSelection || playerSelection.toLowerCase() !== 'rock' && playerSelection.toLowerCase() !== 'paper' && playerSelection.toLowerCase() !== 'scissors') {
-            console.log('Please enter either rock, paper, or scissors')
-            break;
-        }
-
+function playGame(e) {
+    if (Math.max(computerScore, playerScore) < 5) {
         let computerSelection = computerPlay();
-
-        console.log(playRound(playerSelection, computerSelection));
-        console.log(`Player: ${playerScore}, Computer: ${computerScore}`)
-
+        let playerSelection = '';
+    switch(e.target.id) {
+        case 'rock':
+            playerSelection = 'rock'
+            break;
+        case 'paper':
+            playerSelection = 'paper'
+            break;
+        case 'scissors':
+            playerSelection = 'scissors'
+            break;
     }
+    result.textContent = playRound(playerSelection, computerSelection);
+    score.textContent = `Player: ${playerScore}, Computer: ${computerScore}`
     
     if (Math.max(computerScore, playerScore) === 5) {
-        console.log(
-            (computerScore > playerScore) ? 'You Lose!' : (computerScore < playerScore) ? 'You Win!' : "It's a tie!"
-        )
-    } 
+    
+            (computerScore > playerScore) ? score.innerText += "\nYou've lost the game." : (computerScore < playerScore) ? score.innerText += "\nYou've won the game." : score.innerText += "\nIt's a tie!"
 
+    } 
+    }
 }
 
-game();
+const buttons = document.querySelectorAll('button');
+buttons.forEach(button => button.addEventListener('click', playGame));
+
+const result = document.querySelector('.container h2');
+const score = document.querySelector('.container > p');
